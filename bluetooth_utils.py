@@ -369,7 +369,7 @@ def parse_le_advertising_events(sock, mac_addr=None, packet_length=None,
 
             if handler is not None:
                 try:
-                    handler(mac_addr_str, adv_type, data, rssi)
+                    handler(mac_addr_str, adv_type, data, rssi, full_pkt)
                 except Exception as e:
                     print('Exception when calling handler with a BLE advertising event: %r' % (e,))
                     import traceback

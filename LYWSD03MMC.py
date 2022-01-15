@@ -42,6 +42,7 @@ class Measurement:
 	timestamp: int = 0
 	sensorname: str	= ""
 	rssi: int = 0 
+	raw_pkt: str = ""
 
 	def __eq__(self, other): #rssi may be different, so exclude it from comparison
 		if self.temperature == other.temperature and self.humidity == other.humidity and self.calibratedHumidity == other.calibratedHumidity and self.battery == other.battery and self.sensorname == other.sensorname:
@@ -133,6 +134,9 @@ def thread_SendingData():
 					params += " " + str(mea.rssi)
 				params += " " + str(mea.timestamp)
 				fmt +=",timestamp"
+				if (args.packet):
+					fmt +=",packet"
+					params += " " + str(mea.raw_pkt)
 				cmd = path + "/" + args.callback + " " + fmt + " " + params
 				print(cmd)
 				ret = os.system(cmd)
@@ -218,7 +222,7 @@ class MyDelegate(btle.DefaultDelegate):
 	def handleNotification(self, cHandle, data):
 		global measurements
 		try:
-			measurement = Measurement(0,0,0,0,0,0,0,0)
+			measurement = Measurement(0,0,0,0,0,0,0,0,0)
 			if args.influxdb == 1:
 				measurement.timestamp = int((time.time() // 10) * 10)
 			else:
@@ -355,6 +359,7 @@ passivegroup.add_argument("--watchdogtimer","-wdt",metavar='X', type=int, help="
 passivegroup.add_argument("--devicelistfile","-df",help="Specify a device list file giving further details to devices")
 passivegroup.add_argument("--onlydevicelist","-odl", help="Only read devices which are in the device list file",action='store_true')
 passivegroup.add_argument("--rssi","-rs", help="Report RSSI via callback",action='store_true')
+passivegroup.add_argument("--packet","-pkt", help="Report raw ble packet",action='store_true')
 
 
 args=parser.parse_args()
@@ -697,7 +702,7 @@ elif args.passive:
 				measurement.rssi = rssi
 				return measurement
 
-		def le_advertise_packet_handler(mac, adv_type, data, rssi):
+		def le_advertise_packet_handler(mac, adv_type, data, rssi, raw_pkt):
 			global lastBLEPacketReceived
 			if args.watchdogtimer:
 				lastBLEPacketReceived = time.time()
@@ -705,7 +710,7 @@ elif args.passive:
 			data_str = raw_packet_to_str(data)
 
 			global measurements
-			measurement = Measurement(0,0,0,0,0,0,0,0)
+			measurement = Measurement(0,0,0,0,0,0,0,0,0)
 			measurement = (
 				decode_data_atc(mac, adv_type, data_str, rssi, measurement)
 				or
@@ -721,6 +726,9 @@ elif args.passive:
 				if args.round:
 					measurement.temperature=round(measurement.temperature,1)
 					measurement.humidity=round(measurement.humidity,1)
+
+				if args.packet:
+					measurement.raw_pkt=raw_packet_to_str(raw_pkt)
 
 				print("Temperature: ", measurement.temperature)
 				print("Humidity: ", measurement.humidity)
@@ -764,8 +772,6 @@ elif args.passive:
 			keepingLEScanRunningThread = threading.Thread(target=keepingLEScanRunning)
 			keepingLEScanRunningThread.start()
 			logging.debug("keepingLEScanRunningThread started")
-
-
 
 		# Blocking call (the given handler will be called each time a new LE
 		# advertisement packet is detected)
