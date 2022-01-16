@@ -12,4 +12,6 @@ headers = {
     "content-type": "application/json",
 }
 
-post(url, headers=headers, json=payload)
+resp = post(url, headers=headers, json=payload)
+
+print(resp.elapsed.total_seconds())
