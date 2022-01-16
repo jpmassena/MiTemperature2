@@ -4,7 +4,11 @@ With that data, you can now call Ble Passive Monitor addon's service in Home Ass
 
 This allows you to concentrate all bluetooth sensors in the same Home Assistant Addon.
 
-Example: python LYWSD03MMC.py -a -pkt -odl -df sensors.ini -call sendToHABleMonitor.py
+How to use:
+
+- You need to have [Passive BLE Monitor](https://github.com/custom-components/ble_monitor) installed
+- Edit sendToHABleMonitor.py to include your long lived token and your home assistant IP
+- Run ```sudo python LYWSD03MMC.py -a -pkt -odl -df sensors.ini -call sendToHABleMonitor.py```
 
 
 # Read data from Xiaomi Mijia LYWSD03MMC Bluetooth 4.2 Temperature Humidity sensor
