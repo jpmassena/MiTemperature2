@@ -1,3 +1,12 @@
+This is a fork that allows you to request reporting of the raw BLE packer. 
+
+With that data, you can now call Ble Passive Monitor addon's service in Home Assistant (sendToHABleMonitor.py)
+
+This allows you to concentrate all bluetooth sensors in the same Home Assistant Addon.
+
+Example: python LYWSD03MMC.py -a -pkt -odl -df sensors.ini -call sendToHABleMonitor.py
+
+
 # Read data from Xiaomi Mijia LYWSD03MMC Bluetooth 4.2 Temperature Humidity sensor
 
 With this script you can read out the data of your LYWSD03MMC (and some other) sensors, e.g. with Raspberry Pi. Note Raspbery Pi 4 has a very limited bluetooth range. Pi Zero W gives much longer range.
