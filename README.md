@@ -1,4 +1,4 @@
-This is a fork that allows you to request reporting of the raw BLE packer. 
+This is a fork that allows you to request reporting of the raw BLE packet. 
 
 With that data, you can now call Ble Passive Monitor addon's service in Home Assistant (sendToHABleMonitor.py)
 
