@@ -1,3 +1,24 @@
+- Run ```sudo python LYWSD03MMC.py -a -pkt -odl -df sensors.ini -call sendToHABleMonitor.py```
+
+```sudo crontab -e```
+
+```@reboot sleep 60 && /home/jpmassena/MiTemperature2/startup.sh >/dev/null```
+
+
+# Original Readme
+
+
+
+
+
+
+
+
+
+
+
+
+
 This is a fork that allows you to request reporting of the raw BLE packet. 
 
 With that data, you can now call Ble Passive Monitor addon's service in Home Assistant (sendToHABleMonitor.py)
